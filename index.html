@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CSGO Case Profit</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --steel:#E2DDCD;
+  --panel:#EFEBDE;
+  --panel-2:#E7E2D2;
+  --line:#C3BCA4;
+  --ink:#22282A;
+  --ink-2:#5C6260;
+  --hazard:#B57312;
+  --hazard-ink:#FFF6E2;
+  --up:#3F7D3C;
+  --down:#B03A2E;
+  --crate:#8A6A3A;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --steel:#151B1F;
+    --panel:#1D2529;
+    --panel-2:#222C31;
+    --line:#39464D;
+    --ink:#EDEDE3;
+    --ink-2:#97A4A8;
+    --hazard:#F0B323;
+    --hazard-ink:#1A1206;
+    --up:#7BD46B;
+    --down:#EB6A5B;
+    --crate:#B08D57;
+  }
+}
+:root[data-theme="dark"]{
+  --steel:#151B1F; --panel:#1D2529; --panel-2:#222C31; --line:#39464D;
+  --ink:#EDEDE3; --ink-2:#97A4A8; --hazard:#F0B323; --hazard-ink:#1A1206;
+  --up:#7BD46B; --down:#EB6A5B; --crate:#B08D57;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0;
+  background:var(--steel);
+  color:var(--ink);
+  font-family:"IBM Plex Sans Thai","Noto Sans Thai",system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.55;
+}
+.wrap{max-width:1000px;margin:0 auto;padding:22px 18px 64px}
+
+/* ---- header ---- */
+header{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+  padding-bottom:12px;margin-bottom:18px;
+  border-bottom:2px solid var(--ink);
+}
+h1{
+  font-size:clamp(22px,4.4vw,31px);font-weight:700;margin:0;letter-spacing:-.015em;
+}
+.sub{color:var(--ink-2);font-size:13.5px;margin-top:2px}
+.themebtn{
+  font:inherit;font-size:13px;padding:7px 12px;cursor:pointer;
+  background:transparent;color:var(--ink-2);
+  border:1px solid var(--line);border-radius:2px;white-space:nowrap;
+}
+.themebtn:hover{color:var(--ink);border-color:var(--ink)}
+.themebtn:focus-visible,input:focus-visible,button:focus-visible{outline:2px solid var(--hazard);outline-offset:2px}
+
+/* ---- verdict / hero ---- */
+.verdicts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+.v{
+  position:relative;background:var(--panel);border:1px solid var(--line);
+  border-top:5px solid var(--crate);border-radius:2px;padding:16px 16px 14px;
+}
+.v.primary{border-top-color:var(--hazard)}
+.v h2{margin:0;font-size:14.5px;font-weight:600;color:var(--ink-2)}
+.v .note{font-size:12px;color:var(--ink-2);margin-top:1px}
+.big{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:clamp(26px,6.6vw,42px);font-weight:600;letter-spacing:-.03em;
+  line-height:1.05;margin:12px 0 2px;
+}
+.big.pos{color:var(--up)} .big.neg{color:var(--down)}
+.pctline{font-family:"IBM Plex Mono",monospace;font-size:14px;color:var(--ink-2)}
+.pctline b{font-weight:600;color:var(--ink)}
+.bar{height:6px;background:var(--panel-2);margin-top:12px;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--up);width:0;transition:width .35s ease}
+.bar i.neg{background:var(--down)}
+@media (prefers-reduced-motion: reduce){.bar i{transition:none}}
+
+/* ---- layout ---- */
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+section.box{background:var(--panel);border:1px solid var(--line);border-radius:2px;padding:16px}
+section.box > h3{
+  margin:0 0 12px;font-size:15px;font-weight:600;
+  display:flex;align-items:center;gap:8px;
+}
+section.box > h3::before{content:"";width:9px;height:9px;background:var(--hazard);flex:none;transform:rotate(45deg)}
+
+/* ---- fields ---- */
+.field{display:grid;grid-template-columns:1fr 118px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px dashed var(--line)}
+.field:last-child{border-bottom:0}
+.field label{font-size:14px}
+.field .hint{display:block;font-size:11.5px;color:var(--ink-2)}
+input[type=number]{
+  font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:500;
+  width:100%;padding:7px 9px;text-align:right;
+  color:var(--ink);background:var(--panel-2);
+  border:1px solid var(--line);border-radius:2px;
+}
+input[type=number]:hover{border-color:var(--ink-2)}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield}
+input[readonly]{background:transparent;border-style:dashed;color:var(--ink-2);cursor:not-allowed}
+
+/* ---- readout rows ---- */
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.row:last-child{border-bottom:0}
+.row .k{color:var(--ink-2)}
+.row .val{font-family:"IBM Plex Mono",monospace;font-weight:500;white-space:nowrap}
+.row.key{background:var(--panel-2);margin:6px -16px 0;padding:9px 16px;border-bottom:0}
+.row.key .k{color:var(--ink);font-weight:600}
+.row.key .val{font-size:16px}
+
+footer{margin-top:26px;font-size:12.5px;color:var(--ink-2);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+footer button{font:inherit;font-size:12.5px;background:none;border:0;color:var(--ink-2);text-decoration:underline;cursor:pointer;padding:0}
+footer button:hover{color:var(--ink)}
+
+@media (max-width:760px){
+  .cols{grid-template-columns:1fr}
+  .verdicts{grid-template-columns:1fr}
+  .field{grid-template-columns:1fr 104px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1>CSGO Case Profit</h1>
+    <div class="sub">ซื้อกล่องจากเว็บ แล้วตั้งขายในตลาด Steam</div>
+  </div>
+  <button class="themebtn" id="themebtn" type="button">สลับธีม</button>
+</header>
+
+<div class="verdicts">
+  <div class="v primary">
+    <h2>ถ้ารับดึงเกม</h2>
+    <div class="note">แลกยอด Steam เป็นเกมที่เรท <span id="rateA">85%</span></div>
+    <div class="big" id="profitGame">—</div>
+    <div class="pctline">กำไร <b id="pctGame">—</b> จากทุน <span id="costA">—</span> บาท</div>
+    <div class="bar"><i id="barGame"></i></div>
+  </div>
+  <div class="v">
+    <h2>ถ้ารับดึงขยะ</h2>
+    <div class="note">หักอีก 15% ก่อนคิดเรท</div>
+    <div class="big" id="profitJunk">—</div>
+    <div class="pctline">กำไร <b id="pctJunk">—</b> จากทุน <span id="costB">—</span> บาท</div>
+    <div class="bar"><i id="barJunk"></i></div>
+  </div>
+</div>
+
+<div class="cols">
+
+  <section class="box">
+    <h3>กรอกตัวเลข</h3>
+
+    <div class="field">
+      <label for="boxes">จำนวนกล่อง</label>
+      <input type="number" id="boxes" step="1" min="0" value="10">
+    </div>
+    <div class="field">
+      <label for="steamPer">ราคาในสตรีมต่อกล่อง<span class="hint">บาท</span></label>
+      <input type="number" id="steamPer" step="0.01" min="0" value="23">
+    </div>
+    <div class="field">
+      <label for="webPer">ราคาในเว็บต่อกล่อง<span class="hint">ดอลลาร์</span></label>
+      <input type="number" id="webPer" step="0.001" min="0" value="0.42">
+    </div>
+    <div class="field">
+      <label for="extra">ค่าธรรมเนียมคงที่<span class="hint">ดอลลาร์ บวกเพิ่มตอนจ่ายเว็บ</span></label>
+      <input type="number" id="extra" step="0.01" value="1">
+    </div>
+    <div class="field">
+      <label for="rate">เรทที่ร้านรับดึง<span class="hint">0.85 = ได้ 85% ของยอดสุทธิ</span></label>
+      <input type="number" id="rate" step="0.01" min="0" max="1" value="0.8">
+    </div>
+    <div class="field">
+      <label for="gamePrice">ราคาเกมที่จะดึง<span class="hint">บาท</span></label>
+      <input type="number" id="gamePrice" step="1" min="1" value="865">
+    </div>
+
+    <h3 style="margin-top:20px">อัตราและค่าธรรมเนียม</h3>
+    <div class="field">
+      <label for="usdThb">อัตราแลกเงิน<span class="hint">บาทต่อดอลลาร์</span></label>
+      <input type="number" id="usdThb" step="0.01" min="0" value="33.14">
+    </div>
+    <div class="field">
+      <label for="steamFee">ค่าธรรมเนียมตลาด Steam<span class="hint">% ที่ถูกหักตอนขาย</span></label>
+      <input type="number" id="steamFee" step="0.001" min="0" max="50" value="13.042" readonly aria-readonly="true">
+    </div>
+    <div class="field">
+      <label for="junkFee">ส่วนหักกรณีดึงขยะ<span class="hint">% ที่หักก่อนคิดเรท</span></label>
+      <input type="number" id="junkFee" step="1" min="0" value="15" readonly aria-readonly="true">
+    </div>
+  </section>
+
+  <section class="box">
+    <h3>ผลลัพธ์</h3>
+
+    <div class="row"><span class="k">ทุนที่จ่ายเว็บ</span><span class="val" id="oCostUsd">—</span></div>
+    <div class="row key"><span class="k">ทุนรวมเป็นเงินบาท</span><span class="val" id="oCostThb">—</span></div>
+
+    <div class="row" style="margin-top:8px"><span class="k">ราคาตั้งขายในสตรีม</span><span class="val" id="oSteam">—</span></div>
+    <div class="row"><span class="k">ส่วนลดจากราคาสตรีม</span><span class="val" id="oDisc">—</span></div>
+    <div class="row key"><span class="k">ยอดสุทธิหลัง Steam หัก</span><span class="val" id="oNet">—</span></div>
+
+    <div class="row" style="margin-top:8px"><span class="k">เรททุนต่อยอดสุทธิ</span><span class="val" id="oRatio">—</span></div>
+    <div class="row"><span class="k">ยอดสุทธิคิดเป็นเกม</span><span class="val" id="oGames">—</span></div>
+    <div class="row"><span class="k">ราคาเกมหลังคูณเรท</span><span class="val" id="oGameRate">—</span></div>
+
+    <h3 style="margin-top:20px">ยอดที่ได้รับจริง</h3>
+    <div class="row"><span class="k">ดึงเกม</span><span class="val" id="oCreditGame">—</span></div>
+    <div class="row"><span class="k">ดึงขยะ</span><span class="val" id="oCreditJunk">—</span></div>
+    <div class="row"><span class="k">จุดคุ้มทุน (ราคาเว็บสูงสุดต่อกล่อง)</span><span class="val" id="oBreak">—</span></div>
+  </section>
+
+</div>
+
+<footer>
+  <span>ตัวเลขคำนวณตามสูตรในไฟล์ cal.xlsx ค่าที่กรอกจะถูกจำไว้ในเครื่องนี้</span>
+  <button id="reset" type="button">คืนค่าเริ่มต้น</button>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var ids=["boxes","steamPer","webPer","extra","rate","gamePrice","usdThb","steamFee","junkFee"];
+  var el={}; ids.forEach(function(i){el[i]=document.getElementById(i)});
+  var DEFAULTS={}; ids.forEach(function(i){DEFAULTS[i]=el[i].value});
+
+  var thb=new Intl.NumberFormat("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2});
+  var n0=new Intl.NumberFormat("th-TH",{maximumFractionDigits:0});
+  function baht(v){return thb.format(v)+" ฿"}
+  function usd(v){return "$"+thb.format(v)}
+  function pct(v){return (v*100).toFixed(2)+"%"}
+  function num(k){var v=parseFloat(el[k].value); return isFinite(v)?v:0}
+
+  function set(id,txt){document.getElementById(id).textContent=txt}
+
+  function calc(){
+    var boxes=num("boxes"), steamPer=num("steamPer"), webPer=num("webPer"), extra=num("extra");
+    var rate=num("rate"), gamePrice=num("gamePrice"), usdThb=num("usdThb");
+    var steamFee=num("steamFee")/100, junkFee=num("junkFee")/100;
+
+    var costUsd=boxes*webPer+extra;
+    var costThb=costUsd*usdThb;
+
+    var steamTotal=boxes*steamPer;
+    var disc=steamTotal-costThb;
+    var discPct=steamTotal?disc/steamTotal:0;
+    var net=steamTotal*(1-steamFee);
+
+    var creditGame=net*rate;
+    var creditJunk=(net/(1+junkFee))*rate;
+    var pGame=creditGame-costThb, pJunk=creditJunk-costThb;
+
+    set("oCostUsd",usd(costUsd));
+    set("oCostThb",baht(costThb));
+    set("oSteam",baht(steamTotal));
+    set("oDisc",baht(disc)+"  ("+pct(discPct)+")");
+    set("oNet",baht(net));
+    set("oRatio",net?(costThb/net).toFixed(3):"—");
+    set("oGames",gamePrice?(net/gamePrice).toFixed(2)+" เกม":"—");
+    set("oGameRate",baht(rate*gamePrice));
+    set("oCreditGame",baht(creditGame));
+    set("oCreditJunk",baht(creditJunk));
+
+    var breakEven=(boxes&&usdThb)?((creditGame/usdThb)-extra)/boxes:0;
+    set("oBreak",breakEven>0?usd(breakEven)+" / กล่อง":"—");
+
+    set("rateA",(rate*100).toFixed(0)+"%");
+    set("costA",n0.format(Math.round(costThb)));
+    set("costB",n0.format(Math.round(costThb)));
+
+    show("profitGame","pctGame","barGame",pGame,costThb);
+    show("profitJunk","pctJunk","barJunk",pJunk,costThb);
+  }
+
+  function show(bigId,pctId,barId,profit,cost){
+    var b=document.getElementById(bigId), bar=document.getElementById(barId);
+    b.textContent=(profit>=0?"+":"−")+thb.format(Math.abs(profit))+" ฿";
+    b.className="big "+(profit>=0?"pos":"neg");
+    var r=cost?profit/cost:0;
+    set(pctId,(r>=0?"+":"−")+(Math.abs(r)*100).toFixed(2)+"%");
+    bar.style.width=Math.min(Math.abs(r)/0.5*100,100)+"%";
+    bar.className=profit>=0?"":"neg";
+  }
+
+  function save(){
+    try{
+      var o={}; ids.forEach(function(i){o[i]=el[i].value});
+      localStorage.setItem("cs2calc",JSON.stringify(o));
+    }catch(e){}
+  }
+  function load(){
+    try{
+      var raw=localStorage.getItem("cs2calc"); if(!raw)return;
+      var o=JSON.parse(raw);
+      ids.forEach(function(i){ if(o&&o[i]!=null&&o[i]!=="") el[i].value=o[i] });
+    }catch(e){}
+  }
+
+  ids.forEach(function(i){ el[i].addEventListener("input",function(){calc();save()}) });
+  document.getElementById("reset").addEventListener("click",function(){
+    ids.forEach(function(i){el[i].value=DEFAULTS[i]}); calc(); save();
+  });
+
+  var tb=document.getElementById("themebtn");
+  tb.addEventListener("click",function(){
+    var cur=document.documentElement.getAttribute("data-theme");
+    var dark=window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var next=cur?(cur==="dark"?"light":"dark"):(dark?"light":"dark");
+    document.documentElement.setAttribute("data-theme",next);
+    try{localStorage.setItem("cs2calc_theme",next)}catch(e){}
+  });
+  try{
+    var t=localStorage.getItem("cs2calc_theme");
+    if(t) document.documentElement.setAttribute("data-theme",t);
+  }catch(e){}
+
+  load(); calc();
+})();
+</script>
+</body>
+</html>
