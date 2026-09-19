@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>เครื่องคิดกำไรกล่อง CS2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --steel:#E2DDCD;
+  --panel:#EFEBDE;
+  --panel-2:#E7E2D2;
+  --line:#C3BCA4;
+  --ink:#22282A;
+  --ink-2:#5C6260;
+  --hazard:#B57312;
+  --hazard-ink:#FFF6E2;
+  --up:#3F7D3C;
+  --down:#B03A2E;
+  --crate:#8A6A3A;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --steel:#151B1F;
+    --panel:#1D2529;
+    --panel-2:#222C31;
+    --line:#39464D;
+    --ink:#EDEDE3;
+    --ink-2:#97A4A8;
+    --hazard:#F0B323;
+    --hazard-ink:#1A1206;
+    --up:#7BD46B;
+    --down:#EB6A5B;
+    --crate:#B08D57;
+  }
+}
+:root[data-theme="dark"]{
+  --steel:#151B1F; --panel:#1D2529; --panel-2:#222C31; --line:#39464D;
+  --ink:#EDEDE3; --ink-2:#97A4A8; --hazard:#F0B323; --hazard-ink:#1A1206;
+  --up:#7BD46B; --down:#EB6A5B; --crate:#B08D57;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0;
+  background:var(--steel);
+  color:var(--ink);
+  font-family:"IBM Plex Sans Thai","Noto Sans Thai",system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.55;
+}
+.wrap{max-width:1000px;margin:0 auto;padding:22px 18px 64px}
+
+/* ---- header ---- */
+header{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+  padding-bottom:12px;margin-bottom:18px;
+  border-bottom:2px solid var(--ink);
+}
+h1{
+  font-size:clamp(22px,4.4vw,31px);font-weight:700;margin:0;letter-spacing:-.015em;
+}
+.sub{color:var(--ink-2);font-size:13.5px;margin-top:2px}
+.themebtn{
+  font:inherit;font-size:13px;padding:7px 12px;cursor:pointer;
+  background:transparent;color:var(--ink-2);
+  border:1px solid var(--line);border-radius:2px;white-space:nowrap;
+}
+.themebtn:hover{color:var(--ink);border-color:var(--ink)}
+.themebtn:focus-visible,input:focus-visible,button:focus-visible{outline:2px solid var(--hazard);outline-offset:2px}
+
+/* ---- verdict / hero ---- */
+.verdicts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+.v{
+  position:relative;background:var(--panel);border:1px solid var(--line);
+  border-top:5px solid var(--crate);border-radius:2px;padding:16px 16px 14px;
+}
+.v.primary{border-top-color:var(--hazard)}
+.v h2{margin:0;font-size:14.5px;font-weight:600;color:var(--ink-2)}
+.v .note{font-size:12px;color:var(--ink-2);margin-top:1px}
+.big{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:clamp(26px,6.6vw,42px);font-weight:600;letter-spacing:-.03em;
+  line-height:1.05;margin:12px 0 2px;
+}
+.big.pos{color:var(--up)} .big.neg{color:var(--down)}
+.pctline{font-family:"IBM Plex Mono",monospace;font-size:14px;color:var(--ink-2)}
+.pctline b{font-weight:600;color:var(--ink)}
+.bar{height:6px;background:var(--panel-2);margin-top:12px;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--up);width:0;transition:width .35s ease}
+.bar i.neg{background:var(--down)}
+@media (prefers-reduced-motion: reduce){.bar i{transition:none}}
+
+/* ---- layout ---- */
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+section.box{background:var(--panel);border:1px solid var(--line);border-radius:2px;padding:16px}
+section.box > h3{
+  margin:0 0 12px;font-size:15px;font-weight:600;
+  display:flex;align-items:center;gap:8px;
+}
+section.box > h3::before{content:"";width:9px;height:9px;background:var(--hazard);flex:none;transform:rotate(45deg)}
+
+/* ---- fields ---- */
+.field{display:grid;grid-template-columns:1fr 118px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px dashed var(--line)}
+.field:last-child{border-bottom:0}
+.field label{font-size:14px}
+.field .hint{display:block;font-size:11.5px;color:var(--ink-2)}
+input[type=number]{
+  font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:500;
+  width:100%;padding:7px 9px;text-align:right;
+  color:var(--ink);background:var(--panel-2);
+  border:1px solid var(--line);border-radius:2px;
+}
+input[type=number]:hover{border-color:var(--ink-2)}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield}
+input[readonly]{background:transparent;border-style:dashed;color:var(--ink-2);cursor:not-allowed}
+
+/* ---- readout rows ---- */
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.row:last-child{border-bottom:0}
+.row .k{color:var(--ink-2)}
+.row .val{font-family:"IBM Plex Mono",monospace;font-weight:500;white-space:nowrap}
+.row.key{background:var(--panel-2);margin:6px -16px 0;padding:9px 16px;border-bottom:0}
+.row.key .k{color:var(--ink);font-weight:600}
+.row.key .val{font-size:16px}
+
+footer{margin-top:26px;font-size:12.5px;color:var(--ink-2);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+footer button{font:inherit;font-size:12.5px;background:none;border:0;color:var(--ink-2);text-decoration:underline;cursor:pointer;padding:0}
+footer button:hover{color:var(--ink)}
+
+@media (max-width:760px){
+  .cols{grid-template-columns:1fr}
+  .verdicts{grid-template-columns:1fr}
+  .field{grid-template-columns:1fr 104px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1>เครื่องคิดกำไรกล่อง CS2</h1>
+    <div class="sub">ซื้อกล่องจากเว็บ แล้วตั้งขายในตลาด Steam</div>
+  </div>
+  <button class="themebtn" id="themebtn" type="button">สลับธีม</button>
+</header>
+
+<div class="verdicts">
+  <div class="v primary">
+    <h2>ถ้ารับดึงเกม</h2>
+    <div class="note">แลกยอด Steam เป็นเกมที่เรท <span id="rateA">85%</span></div>
+    <div class="big" id="profitGame">—</div>
+    <div class="pctline">กำไร <b id="pctGame">—</b> จากทุน <span id="costA">—</span> บาท</div>
+    <div class="bar"><i id="barGame"></i></div>
+  </div>
+  <div class="v">
+    <h2>ถ้ารับดึงขยะ</h2>
+    <div class="note">หักอีก 15% ก่อนคิดเรท</div>
+    <div class="big" id="profitJunk">—</div>
+    <div class="pctline">กำไร <b id="pctJunk">—</b> จากทุน <span id="costB">—</span> บาท</div>
+    <div class="bar"><i id="barJunk"></i></div>
+  </div>
+</div>
+
+<div class="cols">
+
+  <section class="box">
+    <h3>กรอกตัวเลข</h3>
+
+    <div class="field">
+      <label for="boxes">จำนวนกล่อง</label>
+      <input type="number" id="boxes" step="1" min="0" value="10">
+    </div>
+    <div class="field">
+      <label for="steamPer">ราคาในสตรีมต่อกล่อง<span class="hint">บาท</span></label>
+      <input type="number" id="steamPer" step="0.01" min="0" value="23">
+    </div>
+    <div class="field">
+      <label for="webPer">ราคาในเว็บต่อกล่อง<span class="hint">ดอลลาร์</span></label>
+      <input type="number" id="webPer" step="0.001" min="0" value="0.42">
+    </div>
+    <div class="field">
+      <label for="extra">ค่าธรรมเนียมคงที่<span class="hint">ดอลลาร์ บวกเพิ่มตอนจ่ายเว็บ</span></label>
+      <input type="number" id="extra" step="0.01" value="1">
+    </div>
+    <div class="field">
+      <label for="rate">เรทที่ร้านรับดึง<span class="hint">0.85 = ได้ 85% ของยอดสุทธิ</span></label>
+      <input type="number" id="rate" step="0.01" min="0" max="1" value="0.8">
+    </div>
+    <div class="field">
+      <label for="gamePrice">ราคาเกมที่จะดึง<span class="hint">บาท</span></label>
+      <input type="number" id="gamePrice" step="1" min="1" value="865">
+    </div>
+
+    <h3 style="margin-top:20px">อัตราและค่าธรรมเนียม</h3>
+    <div class="field">
+      <label for="usdThb">อัตราแลกเงิน<span class="hint">บาทต่อดอลลาร์</span></label>
+      <input type="number" id="usdThb" step="0.01" min="0" value="33.14">
+    </div>
+    <div class="field">
+      <label for="steamFee">ค่าธรรมเนียมตลาด Steam<span class="hint">% ที่ถูกหักตอนขาย</span></label>
+      <input type="number" id="steamFee" step="0.001" min="0" max="50" value="13.042" readonly aria-readonly="true">
+    </div>
+    <div class="field">
+      <label for="junkFee">ส่วนหักกรณีดึงขยะ<span class="hint">% ที่หักก่อนคิดเรท</span></label>
+      <input type="number" id="junkFee" step="1" min="0" value="15" readonly aria-readonly="true">
+    </div>
+  </section>
+
+  <section class="box">
+    <h3>ผลลัพธ์</h3>
+
+    <div class="row"><span class="k">ทุนที่จ่ายเว็บ</span><span class="val" id="oCostUsd">—</span></div>
+    <div class="row key"><span class="k">ทุนรวมเป็นเงินบาท</span><span class="val" id="oCostThb">—</span></div>
+
+    <div class="row" style="margin-top:8px"><span class="k">ราคาตั้งขายในสตรีม</span><span class="val" id="oSteam">—</span></div>
+    <div class="row"><span class="k">ส่วนลดจากราคาสตรีม</span><span class="val" id="oDisc">—</span></div>
+    <div class="row key"><span class="k">ยอดสุทธิหลัง Steam หัก</span><span class="val" id="oNet">—</span></div>
+
+    <div class="row" style="margin-top:8px"><span class="k">เรททุนต่อยอดสุทธิ</span><span class="val" id="oRatio">—</span></div>
+    <div class="row"><span class="k">ยอดสุทธิคิดเป็นเกม</span><span class="val" id="oGames">—</span></div>
+    <div class="row"><span class="k">ราคาเกมหลังคูณเรท</span><span class="val" id="oGameRate">—</span></div>
+
+    <h3 style="margin-top:20px">ยอดที่ได้รับจริง</h3>
+    <div class="row"><span class="k">ดึงเกม</span><span class="val" id="oCreditGame">—</span></div>
+    <div class="row"><span class="k">ดึงขยะ</span><span class="val" id="oCreditJunk">—</span></div>
+    <div class="row"><span class="k">จุดคุ้มทุน (ราคาเว็บสูงสุดต่อกล่อง)</span><span class="val" id="oBreak">—</span></div>
+  </section>
+
+</div>
+
+<footer>
+  <span>ตัวเลขคำนวณตามสูตรในไฟล์ cal.xlsx ค่าที่กรอกจะถูกจำไว้ในเครื่องนี้</span>
+  <button id="reset" type="button">คืนค่าเริ่มต้น</button>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var ids=["boxes","steamPer","webPer","extra","rate","gamePrice","usdThb","steamFee","junkFee"];
+  var el={}; ids.forEach(function(i){el[i]=document.getElementById(i)});
+  var DEFAULTS={}; ids.forEach(function(i){DEFAULTS[i]=el[i].value});
+
+  var thb=new Intl.NumberFormat("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2});
+  var n0=new Intl.NumberFormat("th-TH",{maximumFractionDigits:0});
+  function baht(v){return thb.format(v)+" ฿"}
+  function usd(v){return "$"+thb.format(v)}
+  function pct(v){return (v*100).toFixed(2)+"%"}
+  function num(k){var v=parseFloat(el[k].value); return isFinite(v)?v:0}
+
+  function set(id,txt){document.getElementById(id).textContent=txt}
+
+  function calc(){
+    var boxes=num("boxes"), steamPer=num("steamPer"), webPer=num("webPer"), extra=num("extra");
+    var rate=num("rate"), gamePrice=num("gamePrice"), usdThb=num("usdThb");
+    var steamFee=num("steamFee")/100, junkFee=num("junkFee")/100;
+
+    var costUsd=boxes*webPer+extra;
+    var costThb=costUsd*usdThb;
+
+    var steamTotal=boxes*steamPer;
+    var disc=steamTotal-costThb;
+    var discPct=steamTotal?disc/steamTotal:0;
+    var net=steamTotal*(1-steamFee);
+
+    var creditGame=net*rate;
+    var creditJunk=(net/(1+junkFee))*rate;
+    var pGame=creditGame-costThb, pJunk=creditJunk-costThb;
+
+    set("oCostUsd",usd(costUsd));
+    set("oCostThb",baht(costThb));
+    set("oSteam",baht(steamTotal));
+    set("oDisc",baht(disc)+"  ("+pct(discPct)+")");
+    set("oNet",baht(net));
+    set("oRatio",net?(costThb/net).toFixed(3):"—");
+    set("oGames",gamePrice?(net/gamePrice).toFixed(2)+" เกม":"—");
+    set("oGameRate",baht(rate*gamePrice));
+    set("oCreditGame",baht(creditGame));
+    set("oCreditJunk",baht(creditJunk));
+
+    var breakEven=(boxes&&usdThb)?((creditGame/usdThb)-extra)/boxes:0;
+    set("oBreak",breakEven>0?usd(breakEven)+" / กล่อง":"—");
+
+    set("rateA",(rate*100).toFixed(0)+"%");
+    set("costA",n0.format(Math.round(costThb)));
+    set("costB",n0.format(Math.round(costThb)));
+
+    show("profitGame","pctGame","barGame",pGame,costThb);
+    show("profitJunk","pctJunk","barJunk",pJunk,costThb);
+  }
+
+  function show(bigId,pctId,barId,profit,cost){
+    var b=document.getElementById(bigId), bar=document.getElementById(barId);
+    b.textContent=(profit>=0?"+":"−")+thb.format(Math.abs(profit))+" ฿";
+    b.className="big "+(profit>=0?"pos":"neg");
+    var r=cost?profit/cost:0;
+    set(pctId,(r>=0?"+":"−")+(Math.abs(r)*100).toFixed(2)+"%");
+    bar.style.width=Math.min(Math.abs(r)/0.5*100,100)+"%";
+    bar.className=profit>=0?"":"neg";
+  }
+
+  function save(){
+    try{
+      var o={}; ids.forEach(function(i){o[i]=el[i].value});
+      localStorage.setItem("cs2calc",JSON.stringify(o));
+    }catch(e){}
+  }
+  function load(){
+    try{
+      var raw=localStorage.getItem("cs2calc"); if(!raw)return;
+      var o=JSON.parse(raw);
+      ids.forEach(function(i){ if(o&&o[i]!=null&&o[i]!=="") el[i].value=o[i] });
+    }catch(e){}
+  }
+
+  ids.forEach(function(i){ el[i].addEventListener("input",function(){calc();save()}) });
+  document.getElementById("reset").addEventListener("click",function(){
+    ids.forEach(function(i){el[i].value=DEFAULTS[i]}); calc(); save();
+  });
+
+  var tb=document.getElementById("themebtn");
+  tb.addEventListener("click",function(){
+    var cur=document.documentElement.getAttribute("data-theme");
+    var dark=window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var next=cur?(cur==="dark"?"light":"dark"):(dark?"light":"dark");
+    document.documentElement.setAttribute("data-theme",next);
+    try{localStorage.setItem("cs2calc_theme",next)}catch(e){}
+  });
+  try{
+    var t=localStorage.getItem("cs2calc_theme");
+    if(t) document.documentElement.setAttribute("data-theme",t);
+  }catch(e){}
+
+  load(); calc();
+})();
+</script>
+</body>
+</html>
