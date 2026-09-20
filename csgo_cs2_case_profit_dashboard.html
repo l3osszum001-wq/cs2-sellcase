@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CSGO / CS2 Case Profit Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['"IBM Plex Sans Thai"', 'Inter', 'sans-serif'],
+          mono: ['"JetBrains Mono"', '"IBM Plex Mono"', 'monospace'],
+        },
+        colors: {
+          dark: {
+            950: '#090d16',
+            900: '#0f172a',
+            800: '#1e293b',
+            700: '#334155',
+          }
+        }
+      }
+    }
+  }
+</script>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Custom scrollbar and glassmorphism styling */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(100, 116, 139, 0.3); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(100, 116, 139, 0.5); }
+  
+  .glass-card {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  html:not(.dark) .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+  
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+</style>
+</head>
+<body class="bg-slate-900 text-slate-100 dark:bg-[#090d16] dark:text-slate-100 min-h-screen font-sans antialiased transition-colors duration-300">
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 mb-8 border-b border-slate-800 dark:border-slate-800/80">
+    <div class="flex items-center gap-3">
+      <div class="p-3 bg-gradient-to-br from-amber-500 to-amber-700 text-white rounded-2xl shadow-lg shadow-amber-500/20 flex items-center justify-center">
+        <i data-lucide="package-open" class="w-7 h-7"></i>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="text-2xl sm:text-3xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-amber-400 bg-clip-text text-transparent">CSGO / CS2 Case Profit</h1>
+          <span class="px-2.5 py-0.5 text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full">PRO v2.0</span>
+        </div>
+        <p class="text-sm text-slate-400 mt-0.5">ระบบคำนวณกำไรจากการซื้อกล่อง CS2 และขายในตลาด Steam เพื่อดึงเกม/ดึงขยะแบบมืออาชีพ</p>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-3 self-end md:self-auto">
+      <button id="themebtn" type="button" class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 border border-slate-700/60 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-amber-500">
+        <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
+        <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-indigo-400"></i>
+        <span class="theme-text">สลับธีม</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <!-- Card 1: Game Withdrawal -->
+    <div class="glass-card relative overflow-hidden rounded-2xl p-6 border-l-4 border-l-emerald-500 shadow-xl shadow-emerald-950/20 group hover:border-emerald-500/40 transition-all">
+      <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/25 transition-all"></div>
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg">
+            <i data-lucide="gamepad-2" class="w-5 h-5"></i>
+          </div>
+          <h2 class="font-semibold text-base text-slate-200">ถ้ารับดึงเกม</h2>
+        </div>
+        <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          เรท <span id="rateA">85%</span>
+        </span>
+      </div>
+      <p class="text-xs text-slate-400 mb-4">แลกยอด Steam เป็นเกมตามเรทที่กำหนด คุ้มค่าสูงสุด</p>
+      
+      <div class="flex items-baseline gap-3 mb-2">
+        <div class="font-mono text-3xl sm:text-4xl font-bold tracking-tight" id="profitGame">—</div>
+      </div>
+      <div class="flex items-center justify-between text-sm text-slate-400 font-mono mb-4">
+        <span>กำไร <b id="pctGame" class="text-slate-200 font-semibold">—</b></span>
+        <span>ทุนรวม: <span id="costA" class="text-slate-200 font-semibold">—</span> ฿</span>
+      </div>
+      
+      <div class="w-full bg-slate-800/80 rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-700/50">
+        <div id="barGame" class="h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-500" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Card 2: Junk Withdrawal -->
+    <div class="glass-card relative overflow-hidden rounded-2xl p-6 border-l-4 border-l-amber-500 shadow-xl shadow-amber-950/20 group hover:border-amber-500/40 transition-all">
+      <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/25 transition-all"></div>
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <div class="p-2 bg-amber-500/10 text-amber-400 rounded-lg">
+            <i data-lucide="coins" class="w-5 h-5"></i>
+          </div>
+          <h2 class="font-semibold text-base text-slate-200">ถ้ารับดึงขยะ</h2>
+        </div>
+        <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+          หักเพิ่ม 15% ก่อนคิดเรท
+        </span>
+      </div>
+      <p class="text-xs text-slate-400 mb-4">หักค่าธรรมเนียมขยะเพิ่มเติมจากยอดสุทธิก่อนคูณเรท</p>
+      
+      <div class="flex items-baseline gap-3 mb-2">
+        <div class="font-mono text-3xl sm:text-4xl font-bold tracking-tight" id="profitJunk">—</div>
+      </div>
+      <div class="flex items-center justify-between text-sm text-slate-400 font-mono mb-4">
+        <span>กำไร <b id="pctJunk" class="text-slate-200 font-semibold">—</b></span>
+        <span>ทุนรวม: <span id="costB" class="text-slate-200 font-semibold">—</span> ฿</span>
+      </div>
+      
+      <div class="w-full bg-slate-800/80 rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-700/50">
+        <div id="barJunk" class="h-full rounded-full bg-gradient-to-r from-amber-600 to-amber-400 transition-all duration-500" style="width: 0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+
+    <!-- Left Column: Inputs -->
+    <div class="space-y-6">
+      
+      <!-- Box & Market Parameters -->
+      <section class="glass-card rounded-2xl p-6 shadow-xl relative overflow-hidden">
+        <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
+          <div class="p-2.5 bg-indigo-500/10 text-indigo-400 rounded-xl">
+            <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-semibold text-lg text-slate-100">ตั้งค่ากล่องและราคา</h3>
+            <p class="text-xs text-slate-400">กำหนดจำนวนกล่อง ราคาเว็บ และราคาตั้งขายในสตรีม</p>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center p-3 rounded-xl bg-slate-800/40 border border-slate-700/40 hover:border-slate-600/60 transition-all">
+            <div>
+              <label for="boxes" class="text-sm font-medium text-slate-200 flex items-center gap-1.5">
+                <i data-lucide="box" class="w-4 h-4 text-amber-400"></i> จำนวนกล่อง
+              </label>
+              <span class="text-xs text-slate-400">จำนวนเคสที่ต้องการซื้อทั้งหมด</span>
+            </div>
+            <div>
+              <input type="number" id="boxes" step="1" min="0" value="10" class="w-full font-mono text-right bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center p-3 rounded-xl bg-slate-800/40 border border-slate-700/40 hover:border-slate-600/60 transition-all">
+            <div>
+              <label for="steamPer" class="text-sm font-medium text-slate-200 flex items-center gap-1.5">
+                <i data-lucide="tag" class="w-4 h-4 text-indigo-400"></i> ราคาในสตรีมต่อกล่อง
+              </label>
+              <span class="text-xs text-slate-400">ราคาขายในตลาด Steam (บาท)</span>
+            </div>
+            <div>
+              <input type="number" id="steamPer" step="0.01" min="0" value="23" class="w-full font-mono text-right bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center p-3 rounded-xl bg-slate-800/40 border border-slate-700/40 hover:border-slate-600/60 transition-all">
+            <div>
+              <label for="webPer" class="text-sm font-medium text-slate-200 flex items-center gap-1.5">
+                <i data-lucide="globe" class="w-4 h-4 text-emerald-400"></i> ราคาในเว็บต่อกล่อง
+              </label>
+              <span class="text-xs text-slate-400">ราคาซื้อจากเว็บภายนอก (ดอลลาร์)</span>
+            </div>
+            <div>
+              <input type="number" id="webPer" step="0.001" min="0" value="0.42" class="w-full font-mono text-right bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center p-3 rounded-xl bg-slate-800/40 border border-slate-700/40 hover:border-slate-600/60 transition-all">
+            <div>
+              <label for="extra" class="text-sm font-medium text-slate-200 flex items-center gap-1.5">
+                <i data-lucide="receipt" class="w-4 h-4 text-rose-400"></i> ค่าธรรมเนียมคงที่
+              </label>
+              <span class="text-xs text-slate-400">ค่าธรรมเนียมบวกเพิ่มตอนจ่ายเงิน (ดอลลาร์)</span>
+            </div>
+            <div>
+              <input type="number" id="extra" step="0.01" value="1" class="w-full font-mono text-right bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center p-3 rounded-xl bg-slate-800/40 border border-slate-700/40 hover:border-slate-600/60 transition-all">
+            <div>
+              <label for="rate" class="text-sm font-medium text-slate-200 flex items-center gap-1.5">
+                <i data-lucide="percent" class="w-4 h-4 text-amber-400"></i> เรทที่ร้านรับดึง
+              </label>
+              <span class="text-xs text-slate-400">เช่น 0.85 = ได้ 85% ของยอดสุทธิ</span>
+            </div>
+            <div>
+              <input type="number" id="rate" step="0.01" min="0" max="1" value="0.8" class="w-full font-mono text-right bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center p-3 rounded-xl bg-slate-800/40 border border-slate-700/40 hover:border-slate-600/60 transition-all">
+            <div>
+              <label for="gamePrice" class="text-sm font-medium text-slate-200 flex items-center gap-1.5">
+                <i data-lucide="gamepad" class="w-4 h-4 text-purple-400"></i> ราคาเกมที่จะดึง
+              </label>
+              <span class="text-xs text-slate-400">ราคาเกมอ้างอิง (บาท)</span>
+            </div>
+            <div>
+              <input type="number" id="gamePrice" step="1" min="1" value="865" class="w-full font-mono text-right bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Exchange Rates & Fees -->
+      <section class="glass-card rounded-2xl p-6 shadow-xl relative overflow-hidden">
+        <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
+          <div class="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-xl">
+            <i data-lucide="landmark" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-semibold text-lg text-slate-100">อัตราแลกเงินและค่าธรรมเนียม</h3>
+            <p class="text-xs text-slate-400">ค่าอัตราแลกเปลี่ยนและค่าธรรมเนียมระบบ Steam</p>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center p-3 rounded-xl bg-slate-800/40 border border-slate-700/40 hover:border-slate-600/60 transition-all">
+            <div>
+              <label for="usdThb" class="text-sm font-medium text-slate-200 flex items-center gap-1.5">
+                <i data-lucide="dollar-sign" class="w-4 h-4 text-emerald-400"></i> อัตราแลกเงิน
+              </label>
+              <span class="text-xs text-slate-400">อัตราบาทต่อดอลลาร์ ($)</span>
+            </div>
+            <div>
+              <input type="number" id="usdThb" step="0.01" min="0" value="33.14" class="w-full font-mono text-right bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center p-3 rounded-xl bg-slate-800/40 border border-slate-700/40 hover:border-slate-600/60 transition-all">
+            <div>
+              <label for="steamFee" class="text-sm font-medium text-slate-200 flex items-center gap-1.5">
+                <i data-lucide="shield-check" class="w-4 h-4 text-blue-400"></i> ค่าธรรมเนียมตลาด Steam
+              </label>
+              <span class="text-xs text-slate-400">% ที่ถูกหักตอนขายในตลาด</span>
+            </div>
+            <div>
+              <input type="number" id="steamFee" step="0.001" min="0" max="50" value="13.042" readonly aria-readonly="true" class="w-full font-mono text-right bg-slate-900/50 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-400 cursor-not-allowed">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center p-3 rounded-xl bg-slate-800/40 border border-slate-700/40 hover:border-slate-600/60 transition-all">
+            <div>
+              <label for="junkFee" class="text-sm font-medium text-slate-200 flex items-center gap-1.5">
+                <i data-lucide="trash-2" class="w-4 h-4 text-rose-400"></i> ส่วนหักกรณีดึงขยะ
+              </label>
+              <span class="text-xs text-slate-400">% ที่หักก่อนคิดเรท</span>
+            </div>
+            <div>
+              <input type="number" id="junkFee" step="1" min="0" value="15" readonly aria-readonly="true" class="w-full font-mono text-right bg-slate-900/50 border border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-400 cursor-not-allowed">
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Right Column: Financial Results -->
+    <div class="space-y-6">
+
+      <!-- Financial Breakdown -->
+      <section class="glass-card rounded-2xl p-6 shadow-xl relative overflow-hidden">
+        <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
+          <div class="p-2.5 bg-amber-500/10 text-amber-400 rounded-xl">
+            <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-semibold text-lg text-slate-100">สรุปผลกำไรและการเงิน</h3>
+            <p class="text-xs text-slate-400">รายละเอียดต้นทุน ยอดขายสุทธิ และส่วนลดจากสตรีม</p>
+          </div>
+        </div>
+
+        <div class="space-y-3.5 text-sm">
+          <div class="flex justify-between items-center py-2.5 border-b border-slate-800/60">
+            <span class="text-slate-400 flex items-center gap-2"><i data-lucide="credit-card" class="w-4 h-4 text-slate-500"></i> ทุนที่จ่ายเว็บ (USD)</span>
+            <span class="font-mono font-medium text-slate-200" id="oCostUsd">—</span>
+          </div>
+
+          <div class="flex justify-between items-center py-3 px-4 rounded-xl bg-slate-800/60 border border-slate-700/50 my-1 shadow-inner">
+            <span class="font-semibold text-slate-100 flex items-center gap-2"><i data-lucide="wallet" class="w-4 h-4 text-amber-400"></i> ทุนรวมเป็นเงินบาท (THB)</span>
+            <span class="font-mono font-bold text-base text-amber-400" id="oCostThb">—</span>
+          </div>
+
+          <div class="flex justify-between items-center py-2.5 border-b border-slate-800/60">
+            <span class="text-slate-400 flex items-center gap-2"><i data-lucide="shopping-bag" class="w-4 h-4 text-slate-500"></i> ราคาตั้งขายในสตรีมรวม</span>
+            <span class="font-mono font-medium text-slate-200" id="oSteam">—</span>
+          </div>
+
+          <div class="flex justify-between items-center py-2.5 border-b border-slate-800/60">
+            <span class="text-slate-400 flex items-center gap-2"><i data-lucide="badge-percent" class="w-4 h-4 text-slate-500"></i> ส่วนลดจากราคาสตรีม</span>
+            <span class="font-mono font-medium text-slate-200" id="oDisc">—</span>
+          </div>
+
+          <div class="flex justify-between items-center py-3 px-4 rounded-xl bg-slate-800/60 border border-slate-700/50 my-1 shadow-inner">
+            <span class="font-semibold text-slate-100 flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i> ยอดสุทธิหลัง Steam หัก</span>
+            <span class="font-mono font-bold text-base text-emerald-400" id="oNet">—</span>
+          </div>
+
+          <div class="flex justify-between items-center py-2.5 border-b border-slate-800/60">
+            <span class="text-slate-400 flex items-center gap-2"><i data-lucide="scale" class="w-4 h-4 text-slate-500"></i> เรททุนต่อยอดสุทธิ</span>
+            <span class="font-mono font-medium text-slate-200" id="oRatio">—</span>
+          </div>
+
+          <div class="flex justify-between items-center py-2.5 border-b border-slate-800/60">
+            <span class="text-slate-400 flex items-center gap-2"><i data-lucide="layers" class="w-4 h-4 text-slate-500"></i> ยอดสุทธิคิดเป็นเกม</span>
+            <span class="font-mono font-medium text-slate-200" id="oGames">—</span>
+          </div>
+
+          <div class="flex justify-between items-center py-2.5">
+            <span class="text-slate-400 flex items-center gap-2"><i data-lucide="tag" class="w-4 h-4 text-slate-500"></i> ราคาเกมหลังคูณเรท</span>
+            <span class="font-mono font-medium text-slate-200" id="oGameRate">—</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Actual Returns & Break Even -->
+      <section class="glass-card rounded-2xl p-6 shadow-xl relative overflow-hidden">
+        <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
+          <div class="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-xl">
+            <i data-lucide="badge-dollar-sign" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-semibold text-lg text-slate-100">ยอดที่ได้รับจริงและจุดคุ้มทุน</h3>
+            <p class="text-xs text-slate-400">สรุปยอดรับจริงและการคำนวณราคาคุ้มทุนต่อกล่อง</p>
+          </div>
+        </div>
+
+        <div class="space-y-3.5 text-sm">
+          <div class="flex justify-between items-center py-2.5 border-b border-slate-800/60">
+            <span class="text-slate-400 flex items-center gap-2"><i data-lucide="gamepad-2" class="w-4 h-4 text-emerald-400"></i> ดึงเกม (รับจริง)</span>
+            <span class="font-mono font-bold text-emerald-400" id="oCreditGame">—</span>
+          </div>
+
+          <div class="flex justify-between items-center py-2.5 border-b border-slate-800/60">
+            <span class="text-slate-400 flex items-center gap-2"><i data-lucide="coins" class="w-4 h-4 text-amber-400"></i> ดึงขยะ (รับจริง)</span>
+            <span class="font-mono font-bold text-amber-400" id="oCreditJunk">—</span>
+          </div>
+
+          <div class="flex justify-between items-center py-3 px-4 rounded-xl bg-slate-800/60 border border-slate-700/50 mt-2 shadow-inner">
+            <span class="font-semibold text-slate-100 flex items-center gap-2"><i data-lucide="shield-alert" class="w-4 h-4 text-rose-400"></i> จุดคุ้มทุน (ราคาเว็บสูงสุด/กล่อง)</span>
+            <span class="font-mono font-bold text-base text-rose-400" id="oBreak">—</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+
+  <footer class="mt-12 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+    <div class="flex items-center gap-2">
+      <i data-lucide="info" class="w-4 h-4 text-amber-400"></i>
+      <span>ตัวเลขคำนวณตามสูตรทางการเงิน ข้อมูลที่กรอกจะถูกบันทึกอัตโนมัติบนเบราว์เซอร์ของคุณ</span>
+    </div>
+    <button id="reset" type="button" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-all focus:outline-none focus:ring-2 focus:ring-amber-500">
+      <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> คืนค่าเริ่มต้น
+    </button>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var ids = ["boxes", "steamPer", "webPer", "extra", "rate", "gamePrice", "usdThb", "steamFee", "junkFee"];
+  var el = {}; 
+  ids.forEach(function(i){ el[i] = document.getElementById(i); });
+  var DEFAULTS = {}; 
+  ids.forEach(function(i){ DEFAULTS[i] = el[i].value; });
+
+  var thb = new Intl.NumberFormat("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  var n0 = new Intl.NumberFormat("th-TH", { maximumFractionDigits: 0 });
+  
+  function baht(v) { return thb.format(v) + " ฿"; }
+  function usd(v) { return "$" + thb.format(v); }
+  function pct(v) { return (v * 100).toFixed(2) + "%"; }
+  function num(k) { var v = parseFloat(el[k].value); return isFinite(v) ? v : 0; }
+
+  function set(id, txt) { 
+    var node = document.getElementById(id);
+    if (node) node.textContent = txt; 
+  }
+
+  function calc() {
+    var boxes = num("boxes"), steamPer = num("steamPer"), webPer = num("webPer"), extra = num("extra");
+    var rate = num("rate"), gamePrice = num("gamePrice"), usdThb = num("usdThb");
+    var steamFee = num("steamFee") / 100, junkFee = num("junkFee") / 100;
+
+    var costUsd = boxes * webPer + extra;
+    var costThb = costUsd * usdThb;
+
+    var steamTotal = boxes * steamPer;
+    var disc = steamTotal - costThb;
+    var discPct = steamTotal ? disc / steamTotal : 0;
+    var net = steamTotal * (1 - steamFee);
+
+    var creditGame = net * rate;
+    var creditJunk = (net / (1 + junkFee)) * rate;
+    var pGame = creditGame - costThb, pJunk = creditJunk - costThb;
+
+    set("oCostUsd", usd(costUsd));
+    set("oCostThb", baht(costThb));
+    set("oSteam", baht(steamTotal));
+    set("oDisc", baht(disc) + "  (" + pct(discPct) + ")");
+    set("oNet", baht(net));
+    set("oRatio", net ? (costThb / net).toFixed(3) : "—");
+    set("oGames", gamePrice ? (net / gamePrice).toFixed(2) + " เกม" : "—");
+    set("oGameRate", baht(rate * gamePrice));
+    set("oCreditGame", baht(creditGame));
+    set("oCreditJunk", baht(creditJunk));
+
+    var breakEven = (boxes && usdThb) ? ((creditGame / usdThb) - extra) / boxes : 0;
+    set("oBreak", breakEven > 0 ? usd(breakEven) + " / กล่อง" : "—");
+
+    set("rateA", (rate * 100).toFixed(0) + "%");
+    set("costA", n0.format(Math.round(costThb)));
+    set("costB", n0.format(Math.round(costThb)));
+
+    show("profitGame", "pctGame", "barGame", pGame, costThb);
+    show("profitJunk", "pctJunk", "barJunk", pJunk, costThb);
+  }
+
+  function show(bigId, pctId, barId, profit, cost) {
+    var b = document.getElementById(bigId), bar = document.getElementById(barId);
+    if (!b || !bar) return;
+    b.textContent = (profit >= 0 ? "+" : "−") + thb.format(Math.abs(profit)) + " ฿";
+    b.className = "font-mono text-3xl sm:text-4xl font-bold tracking-tight " + (profit >= 0 ? "text-emerald-400" : "text-rose-400");
+    var r = cost ? profit / cost : 0;
+    set(pctId, (r >= 0 ? "+" : "−") + (Math.abs(r) * 100).toFixed(2) + "%");
+    bar.style.width = Math.min(Math.abs(r) / 0.5 * 100, 100) + "%";
+    bar.className = "h-full rounded-full transition-all duration-500 " + (profit >= 0 ? "bg-gradient-to-r from-emerald-600 to-emerald-400" : "bg-gradient-to-r from-rose-600 to-rose-400");
+  }
+
+  function save() {
+    try {
+      var o = {}; 
+      ids.forEach(function(i){ o[i] = el[i].value; });
+      localStorage.setItem("cs2calc_pro", JSON.stringify(o));
+    } catch(e) {}
+  }
+  
+  function load() {
+    try {
+      var raw = localStorage.getItem("cs2calc_pro"); 
+      if (!raw) return;
+      var o = JSON.parse(raw);
+      ids.forEach(function(i){ if (o && o[i] != null && o[i] !== "") el[i].value = o[i]; });
+    } catch(e) {}
+  }
+
+  ids.forEach(function(i){ 
+    el[i].addEventListener("input", function(){ calc(); save(); }); 
+  });
+  
+  var resetBtn = document.getElementById("reset");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", function(){
+      ids.forEach(function(i){ el[i].value = DEFAULTS[i]; }); 
+      calc(); 
+      save();
+    });
+  }
+
+  var tb = document.getElementById("themebtn");
+  if (tb) {
+    tb.addEventListener("click", function(){
+      var isDark = document.documentElement.classList.toggle("dark");
+      try { localStorage.setItem("cs2calc_theme", isDark ? "dark" : "light"); } catch(e) {}
+    });
+  }
+  
+  try {
+    var t = localStorage.getItem("cs2calc_theme");
+    if (t === "light") {
+      document.documentElement.classList.remove("dark");
+    } else if (t === "dark") {
+      document.documentElement.classList.add("dark");
+    }
+  } catch(e) {}
+
+  load(); 
+  calc();
+  
+  // Initialize Lucide icons
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
+})();
+</script>
+</body>
+</html>
